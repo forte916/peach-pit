@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://peachfuzzer.com/2012/Peach /peach/peach.xsd"
+	version="1.0"
+	author="Shinichi Noma" description="HTTP Header Fuzzer Example without cookie.">
+
+
+	<DataModel name="DataGetRequest">
+		<String value="GET / HTTP/1.1" mutable="false" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+
+		<String value="Host: " mutable="false" token="true"/>
+		<String value="www.example.com" mutable="true" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+
+		<String value="User-Agent: " mutable="false" token="true"/>
+		<String value="Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.8.0" mutable="true" token="true" />
+		<String value="\r\n" mutable="false" token="true"/>
+
+		<String value="Accept: " mutable="false" token="true"/>
+		<String value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" mutable="false" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+
+		<String value="Accept-Language: " mutable="false" token="true"/>
+		<String value="ja,en-US;q=0.7,en;q=0.3" mutable="false" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+
+		<String value="Accept-Encoding: " mutable="false"/>
+		<String value = "gzip, deflate" mutable="true" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+
+		<String value="Conection: keep-alive" mutable="false" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+
+		<String value="Authorization: " mutable="false" token="true"/>
+		<String value = "Basic YWRtaW46cGFzc3dvcmQ=" mutable="false" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+		<String value="\r\n" mutable="false" token="true"/>
+	</DataModel>
+
+	<DataModel name="DataResponse">
+		<!-- server reply, we don't care -->
+	</DataModel>
+
+	<StateModel name="StateGet" initialState="Initial">
+		<State name="Initial">
+			<Action type="call" method="Query">
+				<Param>
+					<DataModel ref="DataGetRequest"/>
+				</Param>
+			</Action>
+		</State>
+	</StateModel> 
+
+	<Test name="Default" description="HTTP Request GET Test">
+		<StateModel ref="StateGet"/>
+		<Publisher class="Http">
+			<Param name="Method" value="GET" />
+			<!--Param name="Url" value="http://192.168.11.31/" /-->
+			<Param name="Url" value="http://www.example.com/" />
+		</Publisher>
+
+		<Logger class="Filesystem">
+			<Param name="Path" value="PeachLogs" />
+		</Logger>
+	</Test>
+
+</Peach>
+<!-- end -->

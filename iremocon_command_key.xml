@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Peach xmlns="http://peachfuzzer.com/2012/Peach" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://peachfuzzer.com/2012/Peach /peach/peach.xsd"
+	version="1.0"
+	author="Shinichi Noma" description="Fuzzing iRemocon command via Key.">
+
+
+	<DataModel name="DataRequest">
+		<String value="*" mutable="false" token="true"/>
+		<String value="" />
+		<String value="\r\n" mutable="false" token="true"/>
+	</DataModel>
+
+	<DataModel name="DataResponse">
+		<String value="" />
+	</DataModel>
+
+	<StateModel name="TestState" initialState="Initial">
+		<State name="Initial">
+			<Action type="output">
+				<DataModel ref="DataRequest"/>
+			</Action>
+
+			<Action type="input">
+				<DataModel ref="DataResponse"/>
+			</Action>
+		</State>
+	</StateModel> 
+
+	<Test name="Default" description="iRemocon command via Key">
+		<StateModel ref="TestState"/>
+		<Publisher class="TcpClient">
+			<Param name="Host" value="192.168.2.8" />
+			<Param name="Port" value="51013" />
+		</Publisher>
+
+		<Logger class="Filesystem">
+			<Param name="Path" value="PeachLogs" />
+		</Logger>
+	</Test>
+
+</Peach>
+<!-- end -->
